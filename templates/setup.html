@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+{% block config %}
+<br>
+<form class="container" action = "/setup" method = "POST">
+	<label for="exampleInputEmail1">MYIR Configuration</label>
+	<div class="form-row">
+		<div class="col">
+			<input type="text" name="myir_ip" class="form-control" placeholder="IP">
+		</div>
+		<div class="col">
+			<input type="text" name="myir_gw"class="form-control" placeholder="Gateway">
+		</div>
+		<div class="col">
+       		<input type="text" name="myir_nm" class="form-control" placeholder="Netmask">
+    	</div>
+  	</div>
+<br>
+    <label for="exampleInputEmail1">Server Configuration</label>
+    <div class="form-row">
+    	<div class="col">
+      		<input type="text" name="server_ip" class="form-control" placeholder="IP">
+    	</div>
+    	<div class="col">
+      		<input type="text" name="server_port" class="form-control" placeholder="Port">
+    	</div>
+  	</div>
+ <br>
+	<label for="exampleInputEmail1">MYIR Default Username and Password</label>
+    <div class="form-row">
+    	<div class="col">
+    		<input type="text" name="myir_uname" class="form-control" placeholder="Username">
+    	</div>
+    	<div class="col">
+      		<input type="text" name="myir_pass" class="form-control" placeholder="Password">
+    	</div>
+        <div class="col">
+      		<input type="text" class="form-control" placeholder="Re-enter Password">
+    	</div>
+  	</div>
+<br>
+	<fieldset disabled>
+    	<div class="form-group">
+      		<label for="disabledTextInput">Public Key</label>
+      		<input type="text" id="disabledTextInput" class="form-control" name="pubkey" value="/check/public.key" placeholder="/check/public.key">
+    	</div>
+  	</fieldset>
+    <button type="submit" class="btn btn-primary">Generate File</button>
+<br>
+</form>
+<br>
+{% endblock %}
