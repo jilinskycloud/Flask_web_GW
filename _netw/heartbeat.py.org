@@ -1,0 +1,30 @@
+import httplib2
+import time
+import json
+import os
+
+'''
+cwd = os.path.abspath(os.getcwd())
+file1 = 'conf/ble_conf.text'
+file2 = 'conf/wifi_conf.text'
+ble =  os.path.join(cwd,file1)
+wifi = os.path.join(cwd,file2)
+'''
+
+d1 = json.load(open('/www/web/_netw/conf/ble_conf.text','r'))
+d2 = json.load(open('/www/web/_netw/conf/wifi_conf.text','r'))
+print(d1['hb_en'])
+print(d2['hb_en'])
+
+if d1['hb_en'] == 'on' or d2['hb_en'] == 'on':
+	print("Heartbeat is enabled")
+	http = httplib2.Http(".cache",  disable_ssl_certificate_validation=True)
+	#http = httplib2.Http()
+	while(1):
+		time.sleep(2)
+		#content = http.request("http://192.168.1.74:5000/http_data/0003|7473653845|-87|djkfgh|192.167.1.89", method="GET")[1]
+		content = http.request("http://192.168.1.74:5000/heartBeat/000000002|192.168.1.58|heartbeat", method="GET")[1] 
+		#print(content.decode())
+else:
+	print("Heartbeat is not enabled!")
+

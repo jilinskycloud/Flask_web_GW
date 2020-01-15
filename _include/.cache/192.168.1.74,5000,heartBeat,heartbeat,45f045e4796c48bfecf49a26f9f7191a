@@ -1,0 +1,8 @@
+status: 200
+content-length: 7
+date: Tue, 31 Dec 2019 05:31:45 GMT
+content-location: http://192.168.1.74:5000/heartBeat/heartbeat
+content-type: text/html; charset=utf-8
+server: Werkzeug/0.16.0 Python/3.5.2
+
+success

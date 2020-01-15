@@ -11,13 +11,20 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.4.1.min.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='jquery.js') }}"></script>
+
+
 </head>
 <body>
     {% include 'nav_bar.html' %}
     {% block content %}{% endblock %}
-    {% block mqttconsol %}{% endblock %}
+    {% block consol %}{% endblock %}
+    {% block bacons %}{% endblock %}
     {% block config %}{% endblock %}
     {% block editProfile %}{% endblock %}
+    {% block updatefirmware %}{% endblock %}
+    {% block baconInfo %}{% endblock %}
+    {% block network %}{% endblock %}
+
     {% include 'footer.html' %}
 </body>
 </html>

@@ -1,0 +1,11 @@
+{
+    "con_type": "wifi",
+    "wifi_server_add": "sss",
+    "wifi_whitelist_Mac": "qqqqqqqqqqqqqqq",
+    "wifi_cache_size": "ssssssssssssss",
+    "wifi_hb_ip": "ssss",
+    "wifi_proto": "MQTT",
+    "wifi_data_interval": "qqqqqqqqqqqqqq",
+    "hb_en": "off",
+    "wifi_rssi_range": "qqqqqqqqqqqqqq"
+}

@@ -25,7 +25,6 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 conn = sqlite3.connect('gw_FlaskDb.db')
 print("Opened database successfully");
-conn.close()		
 '''
 conn.execute('CREATE TABLE login (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)')
 print("Table created successfully");
@@ -34,6 +33,11 @@ conn.execute("INSERT INTO login (username,password) VALUES (?,?)",('admin', 'pas
 conn.commit()
 msg = "Record successfully added"
 '''
+conn.close()
+
+
+
+
 #rec = conn.execute("SELECT * FROM login WHERE username=? and password=?", ('admin', 'pass123'))
 
 
@@ -43,15 +47,6 @@ for row in conn.execute("SELECT * FROM login WHERE username=? and password=?", (
 '''
 
 #print(rec.fetchall())
-
-
-
-
-
-
-
-
-
 
 
 
@@ -79,6 +74,12 @@ def getcmd():
 	return jsonify(dictToReturn)
 
 
+@app.route('/reboot')
+def reboot():
+	print("let se if it reboots")
+	os.system("reboot")
+	return "Device Going to Reboot! To Access web page Pleage Refresh Page After 2 minutes..."
+
 # ===================MYSQL FUNCTIONS==========================
 @app.route('/createModel')
 def createModel():
@@ -93,7 +94,7 @@ def delProfile(ids=None):
 	conn.close()
 	#_mysql.delProfile_(mysql, ids)
 	print("deleted..")
-	return redirect(url_for('editProfile'))
+	return redirect(url_for('settings'))
 
 #=============================================================
 #=====================WEB-PAGE FUNCTIONS======================
@@ -116,7 +117,6 @@ def dashboard():
     if 'username' in session:
         u_name = escape(session['username'])
         print(session.get('device1'))
-        print("----------------------------------------------------------------")
         #while(1):
         data = {}
         data['cpu'] = psutil.cpu_percent()
@@ -145,16 +145,14 @@ def dashboard():
     else:
         return redirect(url_for('login'))
 
-@app.route('/updFirm')
-def upfirm():
-	return "upfirm ok"
-@app.route('/ble')
-def ble():
-	return render_template('ble.html')
+@app.route('/baconinfo')
+def baconinfo():
+	return render_template('baconinfo.html')
 
-@app.route('/wifi')
-def wifi():
-	return render_template('wifi.html')
+@app.route('/bacons')
+def bacons():
+	return render_template('bacons.html')
+
 
 
 def cm(dt):
@@ -163,8 +161,8 @@ def cm(dt):
 	pc = klog1.decode()
 	return pc
 # ============================================================MQTT-CONSOLE
-@app.route('/mqtt-console')
-@app.route('/mqtt-console/')
+@app.route('/console-logs')
+@app.route('/console-logs/')
 def mqtt_on():
     if 'username' in session:
         print("1111111111111111111111111111111111111111111111111111111111")
@@ -172,19 +170,52 @@ def mqtt_on():
         klog1 =  klog.read()
         pc = klog1.decode()
         print(klog)
-        return render_template('mqtt-console.html', data=pc)
+        return render_template('console-logs.html', data=pc)
     else:
         return redirect(url_for('login'))
 
-# =============================================================CMD LINE
-@app.route('/sendcmd/<cmd>')
-def sendcmd(cmd=None):
-	if 'username' in session:
-		return "comand received!"
 
-# ============================================================UPDATE ADMIN DETAILS
-@app.route('/editProfile/', methods=['GET', 'POST'])
-def editProfile():
+# =============================================================BLE CONNECT
+
+@app.route('/network', methods=['GET', 'POST'])
+def network():
+	if 'username' in session:
+		if request.method == 'POST':
+			if request.form['con_type'] == 'ble':
+				result = request.form.to_dict()
+				with open("/www/web/_netw/conf/ble_conf.text", "w") as f:
+					json.dump(result, f, indent=4)
+				print(result)
+			elif request.form['con_type'] == 'wifi':
+				result = request.form.to_dict()
+				with open("/www/web/_netw/conf/wifi_conf.text", "w") as f:
+					json.dump(result, f, indent=4)
+				print(result)
+			else:
+				print("form data error")
+			print("restart hb!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			print(os.system("cat /var/run/heartbeat.pid"))
+			pi = open("/var/run/heartbeat.pid", 'r')
+			pid_ = pi.read()
+			pi.close()
+			#print(pid_)
+			os.system('kill -s 10 ' + pid_)
+		d1 = json.load(open('/www/web/_netw/conf/ble_conf.text','r'))
+		d2 = json.load(open('/www/web/_netw/conf/wifi_conf.text','r'))
+
+		return render_template('network.html', d1=d1, d2=d2)
+	else:
+		return redirect(url_for('login'))
+
+		
+
+
+
+
+
+# =============================================================Settings
+@app.route('/settings/', methods=['GET', 'POST'])
+def settings():
 	error = None
 	data = []
 	rec=[]
@@ -207,32 +238,10 @@ def editProfile():
 		rec = f.fetchall()
 		print(rec)
 		conn.close()
-
-		#rec = _mysql.show_(mysql)
 		print(rec)
-		return render_template('editProfile.html', error=error, data=data, rec=rec)
+		return render_template('settings.html', error=error, data=data, rec=rec)
 	else:
 		return redirect(url_for('login'))
-
-
-
-# ============================================================SETUP PAGE
-@app.route('/setup',methods = ['POST', 'GET'])
-@app.route('/setup/',methods = ['POST', 'GET'])
-def setup():
-    if 'username' in session:   
-        print("this is setup page")
-        result = request.form.to_dict()
-        print(result)
-        with open("./tp.text", "w") as f:
-            json.dump(result, f, indent=4)
-        return render_template('setup.html')
-    else:
-        return redirect(url_for('login'))
-
-
-
-
 
 # ============================================================LOGIN PAGE
 @app.route('/login', methods=['GET', 'POST'])
@@ -269,4 +278,4 @@ def logout():
 
 
 if  __name__  ==  '__main__' : 
-    app.run(host = '0.0.0.0',  port = 5000, threaded = True,  debug = True) #, ssl_context='adhoc') #Ssl_context = Context ,
+    app.run(host = '0.0.0.0',  port = 5000, debug = True) #, threaded = True, ssl_context='adhoc') #Ssl_context = Context ,

@@ -7,10 +7,101 @@
     <div class="alert alert-success container" role="alert">
       <h4 class="alert-heading">Where does it come from?</h4>
       <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p> <hr>
-      <p class="mb-0"><span class="border border-primary">This is the Reload time! {{ reload }}</span><br></p><hr>
-      <p class="mb-0"><span class="border border-secondary">This is the CPU testing! {{ cpu }}</span><br></p><hr>
-      <p class="mb-0"><span class="border border-success">This is the CPU Load! {{ cpu_load }}</span><br></p><hr>
-      <p class="mb-0"><span class="border border-warning">This is the CPU Freq! {{ cpu_freq }}</span><br></p><hr>
+<label>System Information</label>
+<table class="table table-striped">
+  <!--
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  -->
+  <tbody>
+    <tr>
+      <th scope="row">Connection Status</th>
+      <td>Connected</td>
+    </tr>
+    <tr>
+      <th scope="row">Reload time</th>
+      <td>{{ data['reload'] }}</td>
+    </tr>
+    <tr>
+      <th scope="row">CPU testing</th>
+      <td>{{ data['cpu'] }}</td>
+    </tr>
+    <tr>
+      <th scope="row">CPU Load</th>
+      <td>{{ data['cpu_load'] }}</td>
+    </tr>
+        <tr>
+      <th scope="row">CPU Freq</th>
+      <td>{{ data['cpu_freq'] }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Host Name</th>
+      <td>{{ data['hostname'] }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Router Model</th>
+      <td>{{ data['routeM'] }}</td>
+    </tr>
+
+    <tr>
+      <th scope="row">Firmvare</th>
+      <td>{{ data['FirmV'] }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Local Time</th>
+      <td>{{ data['lTime'] }}</td>
+    </tr>
+    <tr>
+      <th scope="row">Run Time</th>
+      <td>{{ data['runTime'] }}</td>
+    </tr>
+
+
+  <tr>
+      <th scope="row">Network</th>
+      <td>{{ data['network'] }}</td>
+    </tr>
+
+
+  <tr>
+      <th scope="row">Run Time</th>
+      <td>{{ data['runTime'] }}</td>
+    </tr>
+   
+
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
     <!-- 
       <h4>This is the stats testing! {{ stats }}</h4> 

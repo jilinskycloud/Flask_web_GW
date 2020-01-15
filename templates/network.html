@@ -1,0 +1,220 @@
+{% extends 'layout.html' %}
+
+{% block network %}
+    
+<br><br>
+<nav>
+  <div class="container">
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Wifi Sniffer</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Bluetooth Sniffer</a>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active container" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+<div class="form-group">
+<br>
+<form class="container" action = "/network" method = "POST">
+	<div class="form-row">
+		<div class="form-group form-check">
+      {% if d2['hb_en'] == 'on' %}
+        <input type="checkbox" class="form-check-input" id="exampleCheck_info" checked onclick="myFunction()">
+      {% elif d2['hb_en'] == 'off' %}
+        <input type="checkbox" class="form-check-input" id="exampleCheck_info" onclick="myFunction()">
+      {% endif %}
+    		<label class="form-check-label" for="exampleCheck1">Enable Heartbeat</label>
+  		</div>
+  	</div>
+  	<div class="form-row">
+		<div class="form-group form-check">
+    		<input type="hidden" name="hb_en" class="form-check-input" id="exampleCheck_value" value="{{ d2['hb_en'] }}">
+  		</div>
+  	</div>
+  	<div class="form-row">
+  		<div class="col-xs-6">
+			<input type="text" name="wifi_hb_ip" class="form-control" placeholder="heartbeat server ip" value="{{ d2['wifi_hb_ip'] }}">
+		</div>
+  	</div><br>
+	<div class="form-row">
+		<div class="form-group form-check">
+    		<input type="checkbox" name="wifi_en_post" class="form-check-input" id="exampleCheck1" value="{{ d2['wifi_en_post'] }}">
+    		<label class="form-check-label" for="exampleCheck1">Enable post data</label>
+  		</div>
+  	</div>
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="wifi_server_add" class="form-control" placeholder="server address" value="{{ d2['wifi_server_add'] }}">
+		</div>
+  	</div><br>
+
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="wifi_cache_size" class="form-control" placeholder="Cache Size"  value="{{ d2['wifi_cache_size'] }}">
+		</div>
+  	</div><br>
+
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="wifi_whitelist_Mac" class="form-control" placeholder="white list" value="{{ d2['wifi_whitelist_Mac'] }}" >
+		</div>
+  	</div><br>
+
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="wifi_rssi_range" class="form-control" placeholder="RSSI Range" value="{{ d2['wifi_rssi_range'] }}">
+		</div>
+  	</div><br>
+
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="wifi_data_interval" class="form-control" placeholder="Data Transmission Interval" value="{{ d2['wifi_data_interval'] }}">
+		</div>
+  	</div><br>
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="hidden" name="con_type" value="wifi" class="form-control" placeholder="Cache Size" value="{{ d2['con_type'] }}">
+		</div>
+  	</div>
+	<div class="form-row">
+    <div class="form-group col-md-5">
+    	<label for="inputState">Protocol</label>
+    	<select id="inputState" name="wifi_proto" class="form-control">
+        	<option selected>{{ d2['wifi_proto'] }}</option>
+        	<option>MQTT</option>
+        	<option>HTTP</option>
+      		</select>
+    	</div>
+	</div>
+    <button type="submit" class="btn btn-primary">Save</button>
+<br>
+</form>
+<br>
+    </div>
+  </div>
+
+
+  <div class="tab-pane fade container" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+  	
+
+
+<div class="form-group">
+<br>
+<form class="container" action = "/network" method = "POST">
+	<div class="form-row">
+    <div class="form-group form-check">
+
+
+
+      {% if d1['hb_en'] == 'on' %}
+        <input type="checkbox" class="form-check-input" id="exampleCheck_info12" checked onclick="myFunction12()">
+      {% elif d1['hb_en'] == 'off' %}
+        <input type="checkbox" class="form-check-input" id="exampleCheck_info12" onclick="myFunction12()">
+      {% endif %}
+        <label class="form-check-label" for="exampleCheck1">Enable Heartbeat</label>
+      </div>
+    </div>
+
+
+  	<div class="form-row">
+		<div class="form-group form-check">
+    		<input type="hidden" name="hb_en" class="form-check-input" id="exampleCheck_value12">
+  		</div>
+  	</div>
+  	<div class="form-row">
+  		<div class="col-xs-6">
+			<input type="text" name="ble_hb_ip" class="form-control" placeholder="heartbeat server ip" value="{{ d1['ble_hb_ip'] }}">
+		</div>
+  	</div><br>
+	<div class="form-row">
+		<div class="form-group form-check">
+    		<input type="checkbox" name="ble_en_post" class="form-check-input" id="exampleCheck1">
+    		<label class="form-check-label" for="exampleCheck1">Enable post data</label>
+  		</div>
+  	</div>
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="ble_server_add" class="form-control" placeholder="server address" value="{{ d1['ble_server_add'] }}">
+		</div>
+  	</div><br>
+	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="hidden" name="con_type" value="ble" class="form-control" placeholder="Cache Size">
+		</div>
+  	</div>
+
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="ble_cache_size" class="form-control" placeholder="Cache Size" value="{{ d1['ble_cache_size'] }}">
+		</div>
+  	</div><br>
+
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="ble_whitelist_Mac" class="form-control" placeholder="White List Mac" value="{{ d1['ble_whitelist_Mac'] }}">
+		</div>
+  	</div><br>
+
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="ble_rssi_range" class="form-control" placeholder="RSSI Range" value="{{ d1['ble_rssi_range'] }}">
+		</div>
+  	</div><br>
+
+  	<div class="form-row">
+  		<div class="col-xs-5">
+			<input type="text" name="ble_data_interval" class="form-control" placeholder="Data Transmission Interval" value="{{ d1['ble_data_interval'] }}">
+		</div>
+  	</div><br>
+	<div class="form-row">
+    <div class="form-group col-md-5">
+    	<label for="inputState">Protocol</label>
+    	<select name="ble_proto" id="inputState" class="form-control">
+        	<option selected>{{ d1['ble_proto'] }}</option>
+        	<option>MQTT</option>
+        	<option>HTTP</option>
+      		</select>
+    	</div>
+	</div>
+    <button type="submit" class="btn btn-primary">Save</button>
+<br>
+</form>
+	
+  </div>
+</div>
+
+
+
+<script type="text/javascript">
+function myFunction() {
+  console.log("this is the test...")
+  var av=$('#exampleCheck_info').is(':checked');
+  console.log(av);
+  if(av == true){
+     $("#exampleCheck_value").val("on");
+     console.log(document.querySelector('#exampleCheck_value').value);
+  }
+  else{
+    $("#exampleCheck_value").val("off");
+  }
+}
+
+function myFunction12() {
+  console.log("this is the test...")
+  var av=$('#exampleCheck_info12').is(':checked');
+  console.log(av);
+  if(av == true){
+     $("#exampleCheck_value12").val("on");
+     console.log(document.querySelector('#exampleCheck_value12').value);
+  }
+  else{
+    $("#exampleCheck_value12").val("off");
+  }
+}
+
+
+
+</script>
+{% endblock %}
+
+
+

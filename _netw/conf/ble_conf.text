@@ -1,0 +1,11 @@
+{
+    "ble_proto": "MQTT",
+    "ble_cache_size": "",
+    "ble_rssi_range": "qqqqqqqqqqqqqq",
+    "ble_hb_ip": "ssss",
+    "con_type": "ble",
+    "ble_server_add": "sss",
+    "ble_data_interval": "qqqqqqqqqqqqqq",
+    "ble_whitelist_Mac": "qqqqqqqqqqqqqqq",
+    "hb_en": "on"
+}

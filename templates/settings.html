@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+{% block editProfile %}
+
+<br>
+<nav>
+  <div class="container">
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Login Update:</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">System</a>
+    <a class="nav-item nav-link" id="nav-update-tab" data-toggle="tab" href="#nav-update" role="tab" aria-controls="nav-update" aria-selected="false">Firmware Update</a>
+    <a class="nav-item nav-link" id="nav-reboot-tab" data-toggle="tab" href="#nav-reboot" role="tab" aria-controls="nav-reboot" aria-selected="false">Reboot System</a>
+  </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active container" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+    <br>
+    <div class="container">
+      <br>
+      <form class="container" action = "/settings/" method = "POST">
+        <div class="form-row">
+          <div class="col">
+            <input type="text" name="name" class="form-control" placeholder="Login Name">
+          </div>  
+        </div>
+        <br>
+        <div class="form-row">
+          <div class="col">
+            <input type="text" name="pass" class="form-control" placeholder="Password">
+          </div>
+        </div>
+        <br>
+        <div class="form-row">
+          <div class="col">
+            <input type="text"  class="form-control" placeholder="Re-Enter Password">
+          </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <br>
+      <table class="table table-hover">
+        <thead>
+          <tr><h3>Login Details:</h3></tr>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">User Name:</th>
+              <th scope="col">Password:</th>
+              <th scope="col">DELETE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for coll in rec %}
+          <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>
+              <p class="badge badge-light">{{ coll[1]}}</p>
+              <!-- <a href="http://192.168.1.74/mongoRec/{{collections}}">{{collections}}</a> -->
+            </td>
+            <td>
+              <p class="badge badge-light">{{ coll[2]}}</p>
+                <!-- <a href="http://192.168.1.74/mongoRec/{{collections}}">{{collections}}</a> -->
+            </td>
+            <td><a href="/delProfile/{{coll[0]}}" class="badge badge-danger">Delete</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tab-pane fade container" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+      System Update
+  </div>
+  <div class="tab-pane fade container" id="nav-update" role="tabpanel" aria-labelledby="nav-update-tab">
+    <br>
+    <div class="container">
+      <form>
+        <div class="form-group" action="#">
+          <label for="exampleFormControlFile1">Select Firmware File</label>
+          <input type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </form>
+    </div>
+    <br>
+  </div>
+
+  <div class="tab-pane fade container" id="nav-reboot" role="tabpanel" aria-labelledby="nav-reboot-tab">
+    <br>
+    <form action="/reboot">
+      <div class="form-row align-items-center">
+        <button type="submit" class="btn btn-primary mb-2">Reboot</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
