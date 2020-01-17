@@ -12,11 +12,15 @@ from flask import jsonify
 #from flask_mysqldb import MySQL
 import psutil
 import time
-from _include.dbClasses import mysqldb as _mysql
+#from _include.dbClasses import mysqldb as _mysql
 import json
 import sqlite3
 import os
-import subprocess
+
+import redis 
+import subprocess                                           
+                                                       
+r = redis.StrictRedis(host='localhost', port=6370, db=0, charset="utf-8", decode_responses=True)
 
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
@@ -35,21 +39,12 @@ msg = "Record successfully added"
 '''
 conn.close()
 
-
-
-
 #rec = conn.execute("SELECT * FROM login WHERE username=? and password=?", ('admin', 'pass123'))
-
-
 '''
 for row in conn.execute("SELECT * FROM login WHERE username=? and password=?", ('admin', 'pass123')):
 	print(row)
 '''
-
 #print(rec.fetchall())
-
-
-
 
 '''
 print("here is the curser....")
@@ -151,7 +146,13 @@ def baconinfo():
 
 @app.route('/bacons')
 def bacons():
-	return render_template('bacons.html')
+	obj = r.scan_iter()
+	blk_ble = r.lrange("Black_listed", 0, -1)
+	#for key in r.scan_iter():                                                                                                                              
+		#print(key)      
+		#data = r.hgetall(key)                                                                                                                                     
+		#print(type(data))   
+	return render_template('bacons.html', data=obj, r_obj=r, blk_ble=blk_ble)
 
 
 
@@ -200,6 +201,19 @@ def network():
 			pi.close()
 			#print(pid_)
 			os.system('kill -s 10 ' + pid_)
+			print("restart ble_post!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			if os.path.exists("/var/run/ble_post.pid") == 'True':
+				print(os.system("cat /var/run/ble_post.pid"))
+				pi1 = open("/var/run/ble_post.pid", 'r')
+				pid_1 = pi1.read()
+				pi1.close()
+				os.system('kill -s 10 ' + pid_1)
+			else:
+				 proc = subprocess.Popen(["python3 /www/web/_netw/_httplib.py"], stdout=subprocess.PIPE, shell=True)
+				 print(proc)
+
+
+
 		d1 = json.load(open('/www/web/_netw/conf/ble_conf.text','r'))
 		d2 = json.load(open('/www/web/_netw/conf/wifi_conf.text','r'))
 
@@ -208,6 +222,25 @@ def network():
 		return redirect(url_for('login'))
 
 		
+@app.route('/blk_list', methods=['GET', 'POST'])
+def blk_list():
+	if 'username' in session:
+		if request.method == 'POST':
+			print("blacklisted Bacons Page!")
+			blk_mac = request.form['blacklisted']
+			r.rpush("Black_listed", blk_mac)
+		return redirect(url_for('bacons'))
+	else:
+		return redirect(url_for('login'))
+
+@app.route('/blk_del/<blk_del_mac>')
+def blk_del(blk_del_mac=None):
+	if 'username' in session:
+		r.lrem("Black_listed", -1, blk_del_mac)
+		return redirect(url_for('bacons'))
+	else:
+		return redirect(url_for('login'))
+
 
 
 
@@ -242,6 +275,14 @@ def settings():
 		return render_template('settings.html', error=error, data=data, rec=rec)
 	else:
 		return redirect(url_for('login'))
+
+# ============================================================SCAN BLE PAGE
+@app.route('/scan_ble')
+def scan_ble():
+	os.system("python3 /www/web/_netw/scan_ble.py")
+	return redirect(url_for('bacons')) 
+
+
 
 # ============================================================LOGIN PAGE
 @app.route('/login', methods=['GET', 'POST'])
@@ -278,4 +319,4 @@ def logout():
 
 
 if  __name__  ==  '__main__' : 
-    app.run(host = '0.0.0.0',  port = 5000, debug = True) #, threaded = True, ssl_context='adhoc') #Ssl_context = Context ,
+    app.run(host = '0.0.0.0',  port = 5000) #, debug = True) #, threaded = True, ssl_context='adhoc') #Ssl_context = Context ,

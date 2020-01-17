@@ -1,11 +1,12 @@
 {
-    "ble_proto": "MQTT",
-    "ble_cache_size": "",
-    "ble_rssi_range": "qqqqqqqqqqqqqq",
-    "ble_hb_ip": "ssss",
+    "ble_hb_ip": "192.168.1.7123",
+    "ble_proto": "HTTP",
+    "hb_en": "on",
+    "ble_data_interval": "2",
     "con_type": "ble",
-    "ble_server_add": "sss",
-    "ble_data_interval": "qqqqqqqqqqqqqq",
-    "ble_whitelist_Mac": "qqqqqqqqqqqqqqq",
-    "hb_en": "on"
+    "ble_server_add": "192.168.1.74:5000",
+    "ble_rssi_range": "-100",
+    "ble_en_post": "on",
+    "ble_cache_size": "0",
+    "ble_whitelist_Mac": "0"
 }

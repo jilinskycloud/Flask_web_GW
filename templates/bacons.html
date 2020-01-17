@@ -6,46 +6,56 @@
 <nav>
   <div class="container">
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">WIFI Bacons:</a>
-    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Bluetooth Bacons:</a>
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Bluetooth Bacons:</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Wifi Bacons:</a>
+    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile1" role="tab" aria-controls="nav-profile1" aria-selected="false">Blacklisted Bacons:</a>
   </div>
 </nav>
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active container" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 <br>
+<form action="/scan_ble">
+<button type="submit" value="" class="btn btn-primary">Refresh/Scan</button><br><br>
+</form>
   <table class="table table-hover">
-
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">SR No:</th>
+            <th scope="col">UUID</th>
             <th scope="col">MAC:</th>
-            <th scope="col">TIME</th>
             <th scope="col">RSSI</th>
-            <th scope="col">DEL</th>
+            <th scope="col">MAJOR</th>
+            <th scope="col">MINOR</th>
+            <th scope="col">TX</th>
         </tr>
       </thead>
       <tbody>
-
-      <tr>
-
-        <th scope="row">01</th>
+      {% for key in data %}
+          {% if key != 'Black_listed' %}
+          {% set ble_data = r_obj.hgetall(key) %}
+          <tr>
+        <th scope="row">{{ loop.index }}</th>
         <td>
-
-          <p class="badge badge-light">00000001</p>
+          <p class="badge badge-light">{% print(ble_data['uuid']) %}</p>
         </td>
         <td>
-          <p class="badge badge-light">7294:23:34:23:34"</p>
+          <p class="badge badge-light">{{ ble_data['mac'] }}</p>
         </td>
         <td>
-          <p class="badge badge-light">03:45:09</p>
+          <p class="badge badge-light">{{ ble_data['rssi'] }}</p>
         </td>
         <td>
-          <p class="badge badge-light">-87</p>
+          <p class="badge badge-light">{{ ble_data['maj'] }}</p>
         </td>
-        <td><a href="#" class="badge badge-danger">Delete</a></td>
+        <td>
+          <p class="badge badge-light">{{ ble_data['mina'] }}</p>
+        </td>
+        <td>
+          <p class="badge badge-light">{{ ble_data['adv'] }}</p>
+        </td>
       </tr>
-
+        {% endif %}
+      {% endfor %} 
     </tbody>
   </table>
   </div>
@@ -53,8 +63,10 @@
 
   <div class="tab-pane fade container" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
     <br>
+    <button type="submit" value="Login" class="btn btn-primary">Refresh/Scan</button>
+    <br>
+    <br>
   <table class="table table-hover">
-
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -66,12 +78,9 @@
         </tr>
       </thead>
       <tbody>
-
       <tr>
-
         <th scope="row">01</th>
         <td>
-
           <p class="badge badge-light">00000001</p>
         </td>
         <td>
@@ -85,7 +94,38 @@
         </td>
         <td><a href="#" class="badge badge-danger">Delete</a></td>
       </tr>
+    </tbody>
+  </table>
+</div>
 
+  <div class="tab-pane fade container" id="nav-profile1" role="tabpanel" aria-labelledby="nav-profile-tab1">
+    <br>
+    <form action="/blk_list" method="POST">
+      <input type="text" name="blacklisted" class="form-control" placeholder="Mac Address"><br>
+      <button type="submit" value="Login" class="btn btn-primary">Submit</button>
+    </form>
+    <br>
+    <br>
+  <table class="table table-hover">
+    <thead>
+      
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">MAC:</th>
+            <th scope="col">DEL</th>
+        </tr>
+
+      </thead>
+      <tbody>
+      {% for i in blk_ble %}
+      <tr>
+        <th scope="row">{{ loop.index }}</th>
+        <td>
+          <p class="badge badge-light">{{ i }}</p>
+        </td>
+        <td><a href="/blk_del/{{ i }}" class="badge badge-danger">Delete</a></td>
+      </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>
