@@ -1,0 +1,39 @@
+#! /bin/sh
+# /etc/init.d/flask_daemon
+
+#
+### BEGIN INIT INFO
+# Provides:          hb_daemon
+# Required-Start:    $network
+# Required-Stop:     $network
+# Default-Start:     S 2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Flask , Router web interface 
+# Description:       Flask is an open source, A micro python web framework.
+#                    http://flask.com
+### END INIT INFO
+
+
+case "$1" in
+  start)
+    echo "Starting Heart Beat Daemon"
+    # run application you want to start
+    python3 /www/web/_netw/heartbeat.py &
+    ;;
+  stop)
+    echo "Stopping HeartBead Daemon"
+    # kill application you want to stop
+    kill $(ps aux | grep "python3 /www/web/_netw/heartbeat.py" | grep -v grep | awk '{print $2}') 
+    ;;
+  restart)
+    echo "Restarting the HeartBeat Daemon"
+    kill $(ps aux | grep "python3 /www/web/_netw/heartbeat.py" | grep -v grep | awk '{print $2}') &
+    python3 /www/web/_netw/heartbeat.py &
+    ;;
+  *)
+    echo "Usage: /etc/init.d/flask_daemon{start|stop|restart}"
+    exit 1
+    ;;
+esac
+
+exit 0

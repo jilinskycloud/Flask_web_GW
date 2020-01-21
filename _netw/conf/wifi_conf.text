@@ -1,11 +1,12 @@
 {
+    "wifi_data_interval": "2",
     "wifi_proto": "HTTP",
-    "wifi_server_add": "192.168.1.74:5000",
+    "wifi_rssi_range": "-100",
+    "wifi_whitelist_Mac": "bbb",
     "wifi_hb_ip": "ssss",
     "con_type": "wifi",
-    "wifi_whitelist_Mac": "bbb",
+    "wifi_server_add": "192.168.1.74:5000",
     "hb_en": "off",
-    "wifi_data_interval": "2",
-    "wifi_cache_size": "aaa",
-    "wifi_rssi_range": "-100"
+    "wifi_en_post": "on",
+    "wifi_cache_size": "aaa"
 }

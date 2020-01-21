@@ -1,12 +1,12 @@
 {
+    "ble_server_add": "192.168.1.74:5000",
+    "ble_en_post": "off",
     "ble_hb_ip": "192.168.1.7123",
+    "ble_whitelist_Mac": "0",
     "ble_proto": "HTTP",
     "hb_en": "on",
-    "ble_data_interval": "2",
-    "con_type": "ble",
-    "ble_server_add": "192.168.1.74:5000",
     "ble_rssi_range": "-100",
-    "ble_en_post": "on",
-    "ble_cache_size": "0",
-    "ble_whitelist_Mac": "0"
+    "con_type": "ble",
+    "ble_data_interval": "2",
+    "ble_cache_size": "0"
 }

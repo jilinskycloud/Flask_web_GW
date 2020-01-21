@@ -3,8 +3,6 @@ import time
 import json
 import os
 import signal
-import urllib
-import base64
 
 HB = "OFF"
 
@@ -24,9 +22,7 @@ def status_():
 	return HB
 
 HB = status_()
-
-
-
+#print(HB)
 
 def receive_signal(signum, stack):
 	global HB
@@ -45,12 +41,8 @@ while(1):
 	time.sleep(2)
 	global HB
 	print("in while loop")
-	_sr = "000000002".encode()
-	_sr = base64.b64encode(_sr)
-	print(_sr)
-	body = {'sr':_sr}
+	print(HB)
 	if HB == "ON":
 		print("Heartbeat is enabled")
 		http = httplib2.Http(".cache",  disable_ssl_certificate_validation=True)
-		#content = http.request("http://192.168.1.74:5000/heartBeat/000000002|192.168.1.58|heartbeat", method="GET")[1] 
-		content = http.request("http://192.168.1.74:5000/heartBeat/", method="POST", headers={'Content-type': 'application/x-www-form-urlencoded'}, body=urllib.parse.urlencode(body) )[1]
+		content = http.request("http://192.168.1.74:5000/heartBeat/000000002|192.168.1.58|heartbeat", method="GET")[1] 

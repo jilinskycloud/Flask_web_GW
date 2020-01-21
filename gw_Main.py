@@ -60,26 +60,20 @@ print(type(rows))
 @app.route('/getcmd', methods=['GET', 'POST'])
 def getcmd():
 	if request.method == 'POST':
-		print("yaaaaaaaaaaaaaa hooooooooooooo")
+		print("Get Command Function.......")
 		input_json = request.get_json(force=True)
-		print(input_json)
 		os.system(input_json)
-		print('data from client:', input_json)
 	dictToReturn = {'answer':42}
 	return jsonify(dictToReturn)
 
 
 @app.route('/reboot')
 def reboot():
-	print("let se if it reboots")
+	print("System Reboot Function......")
 	os.system("reboot")
 	return "Device Going to Reboot! To Access web page Pleage Refresh Page After 2 minutes..."
 
 # ===================MYSQL FUNCTIONS==========================
-@app.route('/createModel')
-def createModel():
-	#_mysql.createModel_(MySQL, app)
-	return 'success'
 
 @app.route('/delProfile/<ids>')
 def delProfile(ids=None):
@@ -87,8 +81,7 @@ def delProfile(ids=None):
 	f = conn.execute("DELETE FROM login where id=?", (ids))
 	conn.commit()
 	conn.close()
-	#_mysql.delProfile_(mysql, ids)
-	print("deleted..")
+	print("Delete Login User Function......")
 	return redirect(url_for('settings'))
 
 #=============================================================
@@ -101,7 +94,7 @@ def delProfile(ids=None):
 @app.route('/index')
 def index():
 	if 'username' in session:
-		print("logedin")
+		print("Index Page Function......")
 		return redirect(url_for('dashboard'))
 	return redirect(url_for('login'))
 
@@ -109,54 +102,53 @@ def index():
 @app.route('/dashboard')
 @app.route('/dashboard/')
 def dashboard():
-    if 'username' in session:
-        u_name = escape(session['username'])
-        print(session.get('device1'))
-        #while(1):
-        data = {}
-        data['cpu'] = psutil.cpu_percent()
-        data['stats'] = psutil.cpu_stats()
-        data['cpu_freq'] = psutil.cpu_freq()
-        data['cpu_load'] = psutil.getloadavg()
-        data['ttl_memo'] = psutil.virtual_memory()
-        data['swp_memo'] = psutil.swap_memory()
-        data['hostname'] =cm("hostname")
-        data['routeM'] = 'TC0981'
-        data['FirmV'] = 'v3.0.11_sniffer_TainCloud_r864'
-        data['lTime'] = cm('date')
-        data['runTime'] = cm('uptime')
-        data['network'] = cm('ifconfig')
-        data['mount'] = psutil.disk_partitions(all=False)
-        data['disk_io_count'] = psutil.disk_io_counters(perdisk=False, nowrap=True)
-        data['net_io_count'] = psutil.net_io_counters(pernic=False, nowrap=True)
-        data['nic_addr'] = psutil.net_if_addrs()
-        data['tmp'] = psutil.sensors_temperatures(fahrenheit=False)
-        data['boot_time'] = psutil.boot_time()
-        data['c_user'] = psutil.users()
-        data['reload'] = time.time()
-        #return render_template('dashboard.html',cpu=cpu)
-        return render_template('dashboard.html', data=data)
-        #return 'Logged in as %s' % escape(session['username'])
-    else:
-        return redirect(url_for('login'))
+	if 'username' in session:
+		print("Dashboard Page Function......")
+		u_name = escape(session['username'])
+		print(session.get('device1'))
+		#while(1):
+		data = {}
+		data['cpu'] = psutil.cpu_percent()
+		data['stats'] = psutil.cpu_stats()
+		data['cpu_freq'] = psutil.cpu_freq()
+		data['cpu_load'] = psutil.getloadavg()
+		data['ttl_memo'] = psutil.virtual_memory()
+		data['swp_memo'] = psutil.swap_memory()
+		data['hostname'] =cm("hostname")
+		data['routeM'] = 'TC0981'
+		data['FirmV'] = 'v3.0.11_sniffer_TainCloud_r864'
+		data['lTime'] = cm('date')
+		data['runTime'] = cm('uptime')
+		data['network'] = cm('ifconfig')
+		data['mount'] = psutil.disk_partitions(all=False)
+		data['disk_io_count'] = psutil.disk_io_counters(perdisk=False, nowrap=True)
+		data['net_io_count'] = psutil.net_io_counters(pernic=False, nowrap=True)
+		data['nic_addr'] = psutil.net_if_addrs()
+		data['tmp'] = psutil.sensors_temperatures(fahrenheit=False)
+		data['boot_time'] = psutil.boot_time()
+		data['c_user'] = psutil.users()
+		data['reload'] = time.time()
+		return render_template('dashboard.html', data=data)
+		#return 'Logged in as %s' % escape(session['username'])
+	else:
+		return redirect(url_for('login'))
 
-@app.route('/baconinfo')
-def baconinfo():
-	return render_template('baconinfo.html')
-
-@app.route('/bacons')
-def bacons():
-	obj = r.scan_iter()
-	blk_ble = r.lrange("Black_listed", 0, -1)
-	#for key in r.scan_iter():                                                                                                                              
-		#print(key)      
-		#data = r.hgetall(key)                                                                                                                                     
-		#print(type(data))   
-	return render_template('bacons.html', data=obj, r_obj=r, blk_ble=blk_ble)
-
-
+@app.route('/devices')
+def devices():
+	if 'username' in session:
+		print("Dashboard Page Function......")
+		obj = r.scan_iter()
+		blk_ble = r.lrange("Black_listed", 0, -1)
+		#for key in r.scan_iter():                                                                                                                              
+			#print(key)      
+			#data = r.hgetall(key)                                                                                                                                     
+			#print(type(data))   
+		return render_template('devices.html', data=obj, r_obj=r, blk_ble=blk_ble)
+	else:
+		return redirect(url_for('login'))
 
 def cm(dt):
+	print("Inner CMD Function......")
 	klog = subprocess.Popen(dt, shell=True, stdout=subprocess.PIPE).stdout
 	klog1 =  klog.read()
 	pc = klog1.decode()
@@ -166,11 +158,11 @@ def cm(dt):
 @app.route('/console-logs/')
 def mqtt_on():
     if 'username' in session:
-        print("1111111111111111111111111111111111111111111111111111111111")
+        print("Console Logs Function......")
         klog = subprocess.Popen("dmesg", shell=True, stdout=subprocess.PIPE).stdout
         klog1 =  klog.read()
         pc = klog1.decode()
-        print(klog)
+        #print(klog)
         return render_template('console-logs.html', data=pc)
     else:
         return redirect(url_for('login'))
@@ -181,12 +173,13 @@ def mqtt_on():
 @app.route('/network', methods=['GET', 'POST'])
 def network():
 	if 'username' in session:
+		print("Network Page Function......")
 		if request.method == 'POST':
 			if request.form['con_type'] == 'ble':
 				result = request.form.to_dict()
 				with open("/www/web/_netw/conf/ble_conf.text", "w") as f:
 					json.dump(result, f, indent=4)
-				print(result)
+				#print(result)
 			elif request.form['con_type'] == 'wifi':
 				result = request.form.to_dict()
 				with open("/www/web/_netw/conf/wifi_conf.text", "w") as f:
@@ -194,18 +187,21 @@ def network():
 				print(result)
 			else:
 				print("form data error")
-			print("restart hb!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+			print("restart hb!")
 			print(os.system("cat /var/run/heartbeat.pid"))
 			pi = open("/var/run/heartbeat.pid", 'r')
 			pid_ = pi.read()
 			pi.close()
 			#print(pid_)
 			os.system('kill -s 10 ' + pid_)
-			print("restart ble_post!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-			if os.path.exists("/var/run/ble_post.pid") == 'True':
-				print(os.system("cat /var/run/ble_post.pid"))
+			#print("restart ble_post_________________________________________________")
+			#if os.path.exists("/var/run/ble_post.pid") == 'True':
+			#	print(os.system("cat /var/run/ble_post.pid"))
+			if 'a' == 'a':
 				pi1 = open("/var/run/ble_post.pid", 'r')
 				pid_1 = pi1.read()
+				print("this is the post pid fffff")
+				print(pid_1)
 				pi1.close()
 				os.system('kill -s 10 ' + pid_1)
 			else:
@@ -229,7 +225,21 @@ def blk_list():
 			print("blacklisted Bacons Page!")
 			blk_mac = request.form['blacklisted']
 			r.rpush("Black_listed", blk_mac)
-		return redirect(url_for('bacons'))
+		return redirect(url_for('devices'))
+	else:
+		return redirect(url_for('login'))
+
+@app.route('/white_list_get/<wht_mac>')
+def white_list_get(wht_mac=None):
+	if 'username' in session:
+		print("blacklisted Bacons Page!")
+		print(wht_mac)
+		obj = r.scan_iter()
+		blk_ble = r.lrange("Black_listed", 0, -1)
+		print(blk_ble)
+		if not wht_mac in blk_ble:
+				r.rpush("Black_listed", wht_mac)
+		return redirect(url_for('devices'))
 	else:
 		return redirect(url_for('login'))
 
@@ -237,7 +247,7 @@ def blk_list():
 def blk_del(blk_del_mac=None):
 	if 'username' in session:
 		r.lrem("Black_listed", -1, blk_del_mac)
-		return redirect(url_for('bacons'))
+		return redirect(url_for('devices'))
 	else:
 		return redirect(url_for('login'))
 
@@ -280,7 +290,7 @@ def settings():
 @app.route('/scan_ble')
 def scan_ble():
 	os.system("python3 /www/web/_netw/scan_ble.py")
-	return redirect(url_for('bacons')) 
+	return redirect(url_for('devices')) 
 
 
 
