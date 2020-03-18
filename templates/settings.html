@@ -1,0 +1,155 @@
+{% extends 'layout.html' %}
+{% block editProfile %}
+
+<br>
+<br>
+<nav>
+  <div class="container">
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Update Login</a>
+    <a class="nav-item nav-link" id="nav-autoCon-tab" data-toggle="tab" href="#nav-autoCon" role="tab" aria-controls="nav-autoCon" aria-selected="false">Auto Config</a>
+    <a class="nav-item nav-link" id="nav-update-tab" data-toggle="tab" href="#nav-update" role="tab" aria-controls="nav-update" aria-selected="false">Firmware Update</a>
+    <a class="nav-item nav-link" id="nav-reboot-tab" data-toggle="tab" href="#nav-reboot" role="tab" aria-controls="nav-reboot" aria-selected="false">Reboot System</a>
+  </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active container" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+    <br>
+    <div class="container">
+      <br>
+      <form class="container" action = "/settings/" method = "POST">
+        <div class="form-row">
+          <div class="col">
+            <input type="text" name="name" class="form-control" placeholder="Login Name" required>
+          </div>  
+        </div>
+        <br>
+        <div class="form-row">
+          <div class="col">
+            <input type="text" name="pass" class="form-control" id="pass" placeholder="Enter Password" aceholder="Password" required>
+          </div>
+        </div>
+        <br>
+        <div class="form-row">
+          <div class="col">
+            <input type="text"  class="form-control" id="c_pass" placeholder="Re-Enter Password" required>
+          </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary" onclick="return submitData()">Submit</button>
+      </form>
+      <br>
+      <table class="table table-hover">
+        <thead>
+          <tr><h3>Login Details:</h3></tr>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">User Name: </th>
+              <th scope="col">Password:</th>
+              <th scope="col">DELETE</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for coll in rec %}
+          <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>
+              <p class="badge badge-light">{{ coll[1]}}</p>
+              <!-- <a href="http://192.168.1.74/mongoRec/{{collections}}">{{collections}}</a> -->
+            </td>
+            <td>
+              <p class="badge badge-light">{{ coll[2]}}</p>
+                <!-- <a href="http://192.168.1.74/mongoRec/{{collections}}">{{collections}}</a> -->
+            </td>
+            <td><a href="/delProfile/{{coll[0]}}" class="badge badge-danger"><i class="far fa-trash-alt fa-2x"></i></a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="tab-pane fade container" id="nav-autoCon" role="tabpanel" aria-labelledby="nav-update-tab">
+    <br>
+    <div class="container">
+      <form method="POST" action="/update_autoCon">
+        <div class="form-group" >
+          <label for="exampleFormControlFile1">Default Configuration:</label>
+          <!-- <h1>{{ autoCon['key'] }}</h1> -->
+			<select name="conf_status" id="inputState" class="form-control" required="">
+              <option selected="">{{ autoCon['auto_config'] }}</option>
+              <option>no</option>
+               <option>yes</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <br>
+  </div>
+
+
+
+    <div class="tab-pane fade container" id="nav-update" role="tabpanel" aria-labelledby="nav-autoCon-tab">
+    <br>
+    <div class="container">
+      <form>
+        <div class="form-group" action="#">
+          <label for="exampleFormControlFile1">Select Firmware File</label>
+          <input type="file" class="form-control-file" id="exampleFormControlFile1" disabled>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload <i class="fas fa-cloud-upload-alt"></i></button>
+      </form>
+    </div>
+    <br>
+  </div>
+
+  
+
+  <div class="tab-pane fade container" id="nav-reboot" role="tabpanel" aria-labelledby="nav-reboot-tab">
+    <br>
+    <form action="/reboot">
+      <div class="form-row align-items-center">
+        <button type="submit" class="btn btn-primary mb-2">Reboot</button>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="container" style="min-height:100% width:80%" id="alert_message">
+  {% for category, message in get_flashed_messages(with_categories=True) %}
+    <div class="alert alert-success at-{{category}}" role="alert">
+      <b>{{message}}</b>
+    </div>
+  {% endfor %}
+
+</div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+  function submitData(){
+    var pass = document.getElementById("pass").value;
+    var c_pass = document.getElementById("c_pass").value;
+    if(pass == c_pass){
+      console.log(pass);
+      return true;
+
+    }else{
+      console.log("Password is not same try again");
+      console.log(pass);
+      console.log(c_pass);
+      alert("Entered Password not Same! Try Again!");
+      return false;
+
+    }
+  }
+  
+</script>
+
+{% endblock %}

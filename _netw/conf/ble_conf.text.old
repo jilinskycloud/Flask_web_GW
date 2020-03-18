@@ -1,0 +1,12 @@
+{
+    "ble_hb_ip": "192.168.0.47",
+    "ble_server_add": "192.168.0.74:5000",
+    "ble_proto": "MQTT",
+    "ble_whitelist_Mac": "0",
+    "con_type": "ble",
+    "ble_data_interval": "2",
+    "hb_en": "on",
+    "ble_en_post": "off",
+    "ble_cache_size": "0",
+    "ble_rssi_range": "-100"
+}

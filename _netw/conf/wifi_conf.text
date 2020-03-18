@@ -1,0 +1,11 @@
+{
+    "w_cache_size": "100000",
+    "w_enable_post_data": "off",
+    "w_serial_no": "0000142",
+    "w_server_socket": "192.168.0.74:5000",
+    "sniffer_type": "Wifi",
+    "w_protoc": "HTTP",
+    "w_data_interval": "010",
+    "w_rssi_range": "9|10",
+    "w_heart_beat": "off"
+}

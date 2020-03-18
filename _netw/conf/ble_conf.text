@@ -1,0 +1,11 @@
+{
+    "cache_size": "15",
+    "enable_post_data": "on",
+    "server_socket": "192.168.1.74:5000",
+    "sniffer_type": "IBeacon",
+    "data_interval": "1",
+    "serial_no": "0000006",
+    "protoc": "HTTP",
+    "heart_beat": "on",
+    "rssi_range": "0|500"
+}

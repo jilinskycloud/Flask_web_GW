@@ -1,0 +1,72 @@
+import subprocess
+import json
+import os
+import os.path
+import sqlite3
+from os import path
+
+def read_file(path_):
+  file_p = "/mnt/config_t.text"
+  #print(file_p)
+  if path.exists(file_p) == True:
+    with open(file_p) as json_file:
+      data = json.load(json_file)
+      return data
+  return 'null'
+
+def read_usb():
+  path1 = "/dev/sda"
+  for i in range(3):
+    path_ = path1+str(i) 
+    mm = path.exists(path_)
+    if mm == True:
+      #print(path_)
+      os.system("mount "+path_ +" /mnt/")
+      #print("Path exist!")
+      data = read_file(path_)
+      if data != 'null':
+        #print("Lets do Configuration!!!!!!")
+        os.system("cp /mnt/config_t.text /www/web/_netw/conf/ble_conf.text")
+        #print(data['serial_no'])
+        insert_sqlite(data)
+        ax = str(int(data['serial_no']) + 1).zfill(7)
+        data['serial_no'] = ax  #str(int(data['serial_no']) + 1).zfill(7)
+        with open("/mnt/config_t.text",'w') as jsonfile:
+          json.dump(data, jsonfile, indent=4)
+        #print(data)
+      else:
+        print("File not exist!!!!")
+      os.system("umount "+path_)
+
+def insert_sqlite(data):
+  conn = sqlite3.connect('/www/web/gw_FlaskDb.db')
+  #conn.execute('CREATE TABLE login (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)')
+  print("Table created successfully");
+  # Insert Data to Login table
+  conn.execute("INSERT INTO login (username,password) VALUES (?,?)",(data['gw_uname'], data['gw_pass']) )
+  conn.commit()
+  #msg = "Record successfully added"
+
+
+
+def main():
+  d1 = json.load(open('/www/web/_autoConfig/config.txt','r'))
+  print(d1['auto_config'])
+  if d1['auto_config']  == 'no':
+    print("Going to config the GateWay...")
+    read_usb()
+    d1['auto_config'] = 'yes'   
+    with open("/www/web/_autoConfig/config.txt",'w') as jsonfile:                    
+      json.dump(d1, jsonfile, indent=4)                               
+      print(d1)  
+    os.system("./www/web/_autoConfig/gpio_led /sys/class/leds/cpu/brightness 100000 20")
+  elif d1['auto_config'] == 'yes':
+     print("GateWay Already Configured!")
+     os.system("./www/web/_autoConfig/gpio_led /sys/class/leds/cpu/brightness 10000 20")
+
+
+
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,4 @@
+{
+    "key": " 'Zp9KtocL6smw4h43A3ZqOg==')",
+    "auto_config": "yes"
+}
