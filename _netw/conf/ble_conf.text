@@ -1,11 +1,11 @@
 {
-    "cache_size": "15",
+    "rssi_range": "0|500",
     "enable_post_data": "on",
     "server_socket": "192.168.1.74:5000",
     "sniffer_type": "IBeacon",
-    "data_interval": "1",
-    "serial_no": "0000006",
-    "protoc": "HTTP",
+    "serial_no": "0000003",
     "heart_beat": "on",
-    "rssi_range": "0|500"
+    "protoc": "MQTT",
+    "data_interval": "2",
+    "cache_size": "15"
 }

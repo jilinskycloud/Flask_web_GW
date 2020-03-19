@@ -23,16 +23,19 @@ http = httplib2.Http(".cache",  disable_ssl_certificate_validation=True)
 HB = "OFF"
 PRO = "OFF"
 sr_no = "0000000"
+INTERVAL = 0
 
 def status_():
   global HB
   global PRO
   global sr_no
+  global INTERVAL
   d1 = json.load(open('/www/web/_netw/conf/ble_conf.text','r'))
   #print(d1['hb_en'])
   #print(d2['hb_en'])
   #time.sleep(10)
   sr_no = d1['serial_no']
+  INTERVAL = d1['data_interval']
   if d1['enable_post_data'] == 'on' and d1['protoc'] == 'HTTP':
     HB = "ON"
     PRO = 'HTTP'
@@ -162,17 +165,18 @@ def insert_r1(data1, cache_lim):
 def send():
 	global HB
 	global PRO
+	global INTERVAL
 	d1 = json.load(open('/www/web/_netw/conf/ble_conf.text','r'))
 	print(d1)
 	#d2 = json.load(open('/www/web/_netw/conf/wifi_conf.text','r'))
 	print("Data Post Status is ::", HB, "and Protocol is ::", PRO)
 	while(1):
-		time.sleep(int(d1['data_interval']))
+		time.sleep(int(INTERVAL))
 		#print(HB)
 		if HB == "ON":
 			proc = subprocess.Popen(["/www/web/_netw/ble_read"], stdout=subprocess.PIPE, shell=True)
 			(out, err) = proc.communicate()
-			os.system("/www/web/_autoConfig/gpio_led /sys/class/leds/blue67/brightness 2 2")
+			os.system("/www/web/_autoConfig/gpio_led /sys/class/leds/blue67/brightness 1 2")
 			#print("BLE READ DATA | READY TO SEND")
 			#if len(out) > 0:
 			if len(out) > 102 and len(out) < 120:

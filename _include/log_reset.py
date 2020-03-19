@@ -29,8 +29,8 @@ ticker = threading.Event()
 while not ticker.wait(WAIT_TIME_SECONDS):
     size = check()
     if size[0] > 200:
-        print("File is more than 1 MB", size)
-        print("File need to be delete!!")
+        #print("File is more than 1 MB", size)
+        #print("File need to be delete!!")
         open("/tmp/flask_daemon.log", "w").close()
     if size[1] > 200:
         open("/tmp/hb_daemon.log", "w").close()
@@ -39,4 +39,4 @@ while not ticker.wait(WAIT_TIME_SECONDS):
     if size[3] > 200:
         open("/tmp/autoC_daemon.log", "w").close()
     else:
-        print("File size is less than 1 MB no need to delete!", size)
+        #print("File size is less than 1 MB no need to delete!", size)
