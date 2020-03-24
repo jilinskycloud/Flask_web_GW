@@ -121,7 +121,7 @@ def data_split(data):
   maj = st.join(list(map(a.__getitem__, maj_)))
   mina = st.join(list(map(a.__getitem__, min_)))
   tx = st.join(list(map(a.__getitem__, tx_)))
-  tx = int(tx, 16)
+  tx = int(tx, 16) - 256
   received = {'mac':mac, 'rssi':rssi, 'adv':adv, 'uuid':uuid, 'maj':maj, 'mina':mina, 'tx':tx, 'sr_no':sr_no} 
   return received
 
@@ -162,6 +162,10 @@ def insert_r1(data1, cache_lim):
 
 
 
+
+
+
+
 def send():
 	global HB
 	global PRO
@@ -184,17 +188,18 @@ def send():
 				out1 = data_split(out.decode())
 				v_chk = verify_mac(out1['mac'])
 				#print(out1)
-				ble_rssi = int(out1['rssi'], 16)
+				ble_rssi = int(out1['rssi'], 16) -256 
 				rssi_lim = d1['rssi_range']
 				rssi_lim = rssi_lim.split("|")
 				#print(rssi_lim)
 				cache_lim = d1['cache_size']
-				#print(cache_lim)
-				if v_chk == 1 and ble_rssi > int(rssi_lim[0]) and ble_rssi < int(rssi_lim[1]):
+				print("this is the ble rssi:::",ble_rssi)
+				print("This is the LIMIT::::::::",rssi_lim)
+				if v_chk == 1 and ble_rssi < int(rssi_lim[0]) and ble_rssi > int(rssi_lim[1]):
 					print("White listed mac address-----------Ready to send")
 					print(out1['mac'])
-					avg = insert_r1(out1, int(cache_lim))  #it returns avg value
-					#print(int(out1['rssi'], 16))
+					avg = int(insert_r1(out1, int(cache_lim)) -256)  #it returns avg value
+					#print(int(out1['rssi'], 16)) -256
 					out1['rssi'] = avg
 					print("After RSSI Normalization",out1)
 					#time.sleep(3)
@@ -225,7 +230,8 @@ def send():
 						try:
 							content = http.request(http_url, method="POST", headers={'Content-type': 'application/x-www-form-urlencoded'}, body=urllib.parse.urlencode(body))[1]
 						except Exception as e:
-							raise e
+							pass
+							#raise e
 						print("SENDING BY HTTP PROTOCOL")
 						#print(content.decode())
 					elif PRO == 'MQTT':

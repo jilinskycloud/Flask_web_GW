@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block title %}
-  Home
+  {{ data['serial'] }}
 {% endblock %}
 
 {% block content %}
@@ -28,7 +28,7 @@
 
 <div class="list-group">
   <button type="button" class="list-group-item list-group-item-action" disabled id="_sysInfo">
-    <i class="fa fa-info-circle" aria-hidden="true"></i> System Information
+    <i class="fa fa-info-circle" aria-hidden="true"></i> System Information 
   </button>
   <button type="button" class="list-group-item list-group-item-action" disabled>
     <div class="row">
@@ -36,10 +36,22 @@
       <div class="col-9">{{ data['hostname'] }}</div>
     </div>
   </button>
+    <button type="button" class="list-group-item list-group-item-action" disabled>
+    <div class="row">
+      <div class="col-3">Gateway Serial:</div>
+      <div class="col-9">{{ data['serial'] }}</div>
+    </div>
+  </button>
   <button type="button" class="list-group-item list-group-item-action" disabled>
     <div class="row">
       <div class="col-3">Router Model:</div>
       <div class="col-9">{{ data['routeM'] }}</div>
+    </div>
+  </button>
+  <button type="button" class="list-group-item list-group-item-action" disabled>
+    <div class="row">
+      <div class="col-3">System Memory:</div>
+      <div class="col-9">Total Memory: {{ data['ttl_memo'] }}MB | Used: {{ data['ttl_memo_used'] }}MB Available: {{ data['ttl_memo_avai'] }}MB</div>
     </div>
   </button>
   <button type="button" class="list-group-item list-group-item-action" disabled>

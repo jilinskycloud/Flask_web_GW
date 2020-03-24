@@ -31,7 +31,7 @@ def status_():
 	#print(d1['hb_en'])
 	#print(d2['hb_en'])
 	server_socket = d1['server_socket']
-	print("this is the server soctek--------------------------------------------------------------------------", server_socket)
+	print("Server Socket :: ", server_socket)
 	serial_no = d1['serial_no']
 	#time.sleep(10)
 	if d1['heart_beat'] == 'on' or d2['w_heart_beat'] == 'on':
@@ -72,7 +72,7 @@ f.write(pidis)
 f.close()
 
 while(1):
-	time.sleep(2)
+	time.sleep(1)
 	global HB
 	global mac
 	#print("in while loop")
@@ -85,21 +85,22 @@ while(1):
 	print("Heart Beat Status :: ",HB)
 	body = {'sr':_sr}
 	if HB == "ON":
-		print("Heartbeat is enabled")
+		#print("Heartbeat is enabled")
 		http = httplib2.Http(".cache",  disable_ssl_certificate_validation=True)
 		#content = http.request("http://192.168.1.74:5000/heartBeat/000000002|192.168.1.58|heartbeat", method="GET")[1]
 		url_ = "http://"+server_socket+"/heartBeat/"
-		print(url_)
+		print("Server URL :: ", url_)
 		try:
 		 	content = http.request(url_, method="POST", headers={'Content-type': 'application/x-www-form-urlencoded'}, body=urllib.parse.urlencode(body) )[1]
 		except Exception as e:
-		 	raise e 
+		 	pass
+		 	#raise e 
 		content = content.decode("utf-8") 
-		print("this is the output of the  heartbeat",content)
+		print("[ Time :: ",time.ctime()," ] | Server Response to Gateway :: ",content)
 		if redis_started() == 1:
 			if content == 'success':
 				r.set("hbeat", 'connected')
-				print("Server is Connected!")
+				print("Redis Server is Connected!")
 				os.system("/www/web/_autoConfig/gpio_led /sys/class/leds/green66/brightness 2 2")
 			else:
 				print("Not Connected!")

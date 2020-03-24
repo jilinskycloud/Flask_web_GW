@@ -67,6 +67,24 @@ def getcmd():
 	dictToReturn = {'answer':42}
 	return jsonify(dictToReturn)
 
+@app.route('/resetBle', methods=['GET', 'POST'])
+def resetBle():
+	if 'username' in session:
+		reset_ble = request.form['reset_ble']
+		if request.method == 'POST':
+			print("||||||||||||", reset_ble)
+			reset_ble = request.form['reset_ble']
+			if reset_ble == 'off':
+				os.system("echo 0 > /sys/class/leds/rst_ble62/brightness")
+				return redirect(url_for('settings'))
+			elif reset_ble == 'on':
+				os.system("echo 1 > /sys/class/leds/rst_ble62/brightness")
+				return redirect(url_for('settings'))
+	else:
+		return redirect(url_for('login'))
+
+
+
 
 @app.route('/reboot')
 def reboot():
@@ -116,12 +134,16 @@ def dashboard():
 		u_name = escape(session['username'])
 		print(session.get('device1'))
 		#while(1):
+		gw_serial = json.load(open('/www/web/_netw/conf/ble_conf.text','r'))
 		data = {}
+		data['serial'] = gw_serial['serial_no']
 		data['cpu'] = psutil.cpu_percent()
 		data['stats'] = psutil.cpu_stats()
 		data['cpu_freq'] = psutil.cpu_freq()
 		data['cpu_load'] = psutil.getloadavg()
-		data['ttl_memo'] = psutil.virtual_memory()
+		data['ttl_memo'] = round(psutil.virtual_memory().total/1048576)
+		data['ttl_memo_used'] = round(psutil.virtual_memory().used/1048576)
+		data['ttl_memo_avai'] = round(psutil.virtual_memory().available/1048576)
 		data['swp_memo'] = psutil.swap_memory()
 		data['hostname'] =cm("hostname")
 		data['routeM'] = 'TC0981'
@@ -332,9 +354,16 @@ def settings():
 		rec = f.fetchall()
 		print(rec)
 		conn.close()
+		stt_ble = proc = os.popen('cat /sys/class/leds/rst_ble62/brightness').read()
+		print("hsdkjfhksjdhfkshfkjhskjfhkjshfkshkfhkshfkhskhfkjhskjdhfkjshkdfhskjhdfkjshkjfhskjhfkshdf",stt_ble)
+		if int(stt_ble) == 1 or int(stt_ble) == 255:
+			stt_ble = "ON"
+			print("teri lul di nu maran")
+		else:
+			stt_ble = "OFF"
 		print(rec)
 		autoCon = json.load(open('/www/web/_autoConfig/config.txt','r'))
-		return render_template('settings.html', error=error, data=data, rec=rec, autoCon=autoCon)
+		return render_template('settings.html', error=error, data=data, rec=rec, autoCon=autoCon, stt_ble=stt_ble)
 	else:
 		return redirect(url_for('login'))
 
@@ -342,7 +371,7 @@ def settings():
 def update_autoCon():
 	if 'username' in session:
 		if request.method == 'POST':
-			print("_____--------------------------________________---------------------------__________________________------------------",request.form['conf_status'])
+			print("This is the Configuration Status::",request.form['conf_status'])
 			conf_status = request.form['conf_status']
 			with open('/www/web/_autoConfig/config.txt', 'r+') as f:
 				data = json.load(f)

@@ -1,11 +1,11 @@
 {
-    "rssi_range": "0|500",
-    "enable_post_data": "on",
-    "server_socket": "192.168.1.74:5000",
+    "data_interval": "0",
+    "serial_no": "CNCC202003-00003-20",
     "sniffer_type": "IBeacon",
-    "serial_no": "0000003",
     "heart_beat": "on",
+    "enable_post_data": "on",
     "protoc": "MQTT",
-    "data_interval": "2",
-    "cache_size": "15"
+    "cache_size": "15",
+    "server_socket": "192.168.1.74:5000",
+    "rssi_range": "-1|-90"
 }

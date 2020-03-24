@@ -6,17 +6,9 @@ import sqlite3
 from os import path
 import base64
 from Crypto.Cipher import AES
+from random import randint
 
 def read_file(path_):
-  file_p = "/mnt/config_t.text"
-  #print(file_p)
-  if path.exists(file_p) == True:
-    with open(file_p) as json_file:
-      data = json.load(json_file)
-      return data
-  return 'null'
-
-def read_file1(path_):
   file_p = "/mnt/config_t.text"
   if path.exists(file_p) == True:
     with open(file_p,'r') as data:
@@ -45,6 +37,10 @@ def get_key(data):
   dd = data.split(',')
   key = dd[3]
   return key
+
+def generate_serial(data):
+  data['serial_no'] = data['serial_no'] +"-"+str(randint(10,99))
+  return data
 
 def format_data(data):
   dd = data.split(',')
@@ -76,6 +72,7 @@ def format_data(data):
     "protoc": plaintext[10]
     #"key": dd[3]
   }
+  data = generate_serial(data)
   try:
     cipher.verify(mac)
     #print("The message is authentic: pt=%s" % (data))
@@ -87,6 +84,12 @@ def format_data(data):
 
 def bs64(vl):
   return str(base64.b64encode(vl), 'utf-8')
+
+def serial_formate(sr):
+  sr = sr.split("-")
+  sr[1] = str(int(sr[1]) + 1).zfill(5)
+  sr = sr[0]+"-"+sr[1]
+  return sr
 
 def re_write(data1):
   dd = data1.split(',')
@@ -101,13 +104,21 @@ def re_write(data1):
   print(plaintext)
   plaintext = plaintext.decode("utf-8")
   plt = plaintext.split("~")
-  plt1 = str(int( plt[6]) + 1).zfill(7)
+  sr = plt[6]
+  plt1 = serial_formate(sr)
+
+  #plt1 = str(int( plt[6]) + 1).zfill(7)
   print(plt1)
   re_data = plt[0]+"~"+plt[1]+"~"+plt[2]+"~"+plt[3]+"~"+plt[4]+"~"+plt[5]+"~"+plt1+"~"+plt[7]+"~"+plt[8]+"~"+plt[9]+"~"+plt[10]
   re_data = str.encode(re_data)
   cipher12 = AES.new(key, AES.MODE_EAX)
   re_data = bs64(cipher12.nonce),bs64(cipher12.encrypt(re_data)),bs64(cipher12.digest()),bs64(key)
   return re_data
+
+
+
+
+
 
 def read_usb():
   path1 = "/dev/sda"
@@ -119,7 +130,7 @@ def read_usb():
       #print(path_)
       os.system("mount "+path_ +" /mnt/")
       #print("Path exist!")
-      data1 = read_file1(path_)
+      data1 = read_file(path_)
       if data1 != 'null':
         data = format_data(data1)
         print("Lets do Configuration!!!!!!")
@@ -128,8 +139,8 @@ def read_usb():
         #return 0
         #print(data['serial_no'])
         insert_sqlite(data)   
-        ax = str(int(data['serial_no']) + 1).zfill(7)
-        data['serial_no'] = ax  #str(int(data['serial_no']) + 1).zfill(7)
+        #ax = str(int(data['serial_no']) + 1).zfill(5)
+        #data['serial_no'] = ax  #str(int(data['serial_no']) + 1).zfill(7)
         print("thi is done really")
         re_data = re_write(data1)
 
@@ -180,6 +191,8 @@ def main():
     print("Going to config the GateWay...")
     read_usb() 
     os.system("/www/web/_autoConfig/gpio_led /sys/class/leds/green66/brightness 100000 20")
+    os.system("/etc/init.d/hb_daemon stop")
+    os.system("/etc/init.d/hb_daemon start")
   elif d1['auto_config'] == 'yes':
      print("GateWay Already Configured!")
      os.system("/www/web/_autoConfig/gpio_led /sys/class/leds/green66/brightness 10000 20")

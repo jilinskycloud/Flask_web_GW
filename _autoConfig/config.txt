@@ -1,4 +1,4 @@
 {
-    "auto_config": "yes",
-    "key": " 'r2FkMRaiOwEK4SVISq33hw==')"
+    "key": " 'PGRMaZ11+vGiqHad8nO36A==')",
+    "auto_config": "yes"
 }

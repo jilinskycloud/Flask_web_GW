@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
-
+{% block title %}
+  Network
+{% endblock %}
 {% block network %}
     
 <br><br>
@@ -44,7 +46,8 @@
         <h5><span class="badge badge-light">Serial No.</span></h5>
         <div class="form-row">
           <div class="col-xs-6">
-            <input type="text" name="serial_no" class="form-control" placeholder="heartbeat server ip" value="{{ d1['serial_no'] }}" required>
+            <input type="text" name="serial_no" class="form-control" placeholder="heartbeat server ip" style="color: red;" value="{{ d1['serial_no'] }}" required disabled="">
+            <input type="text" name="serial_no" class="form-control" placeholder="heartbeat server ip" style="color: red;" value="{{ d1['serial_no'] }}" required hidden>
           </div>
         </div><br>
         <div class="form-row">
@@ -127,7 +130,7 @@
         <h5><span class="badge badge-light">Serial No.</span></h5>
         <div class="form-row">
           <div class="col-xs-6">
-            <input type="text" name="w_serial_no" class="form-control" placeholder="heartbeat server ip" value="{{ d2['w_serial_no'] }}" required>
+            <input type="text" name="w_serial_no" class="form-control" placeholder="heartbeat server ip" style="color: red;" value="{{ d2['w_serial_no'] }}" required disabled>
           </div>
         </div><br>
         <div class="form-row">

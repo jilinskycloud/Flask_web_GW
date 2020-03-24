@@ -10,7 +10,7 @@ from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 import redis
 
-r = redis.StrictRedis(host='localhost', port=6370, db=1, charset="utf-8", decode_responses=True)
+r = redis.StrictRedis(host='localhost', port=6379, db=1, charset="utf-8", decode_responses=True)
 
 def read_ble():
 	proc = subprocess.Popen(["/www/web/_netw/ble_read"], stdout=subprocess.PIPE, shell=True)

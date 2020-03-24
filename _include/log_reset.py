@@ -38,5 +38,5 @@ while not ticker.wait(WAIT_TIME_SECONDS):
         open("/tmp/http_daemon.log", "w").close()
     if size[3] > 200:
         open("/tmp/autoC_daemon.log", "w").close()
-    else:
+    #else:
         #print("File size is less than 1 MB no need to delete!", size)

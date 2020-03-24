@@ -1,4 +1,9 @@
 {% extends 'layout.html' %}
+
+{% block title %}
+  Settings
+{% endblock %}
+
 {% block editProfile %}
 
 <br>
@@ -7,6 +12,8 @@
   <div class="container">
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Update Login</a>
+    <a class="nav-item nav-link" id="nav-resetBle-tab" data-toggle="tab" href="#nav-resetBle" role="tab" aria-controls="nav-resetBle" aria-selected="false">Reset BLE</a>
+    <a class="nav-item nav-link" id="nav-resetredis-tab" data-toggle="tab" href="#nav-resetredis" role="tab" aria-controls="nav-resetredis" aria-selected="false" hidden>Reset Redis</a>
     <a class="nav-item nav-link" id="nav-autoCon-tab" data-toggle="tab" href="#nav-autoCon" role="tab" aria-controls="nav-autoCon" aria-selected="false">Auto Config</a>
     <a class="nav-item nav-link" id="nav-update-tab" data-toggle="tab" href="#nav-update" role="tab" aria-controls="nav-update" aria-selected="false">Firmware Update</a>
     <a class="nav-item nav-link" id="nav-reboot-tab" data-toggle="tab" href="#nav-reboot" role="tab" aria-controls="nav-reboot" aria-selected="false">Reboot System</a>
@@ -84,6 +91,43 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <br>
+  </div>
+
+
+<!--        testing        -->
+
+
+  <div class="tab-pane fade container" id="nav-resetBle" role="tabpanel" aria-labelledby="nav-update-tab">
+    <br>
+    <div class="container">
+      <form method="POST" action="/resetBle">
+        <div class="form-group" >
+          <label for="exampleFormControlFile1">Reset BLE: <span style="color:red;">(Current Status={{ stt_ble }})</span></label>
+          <!-- <h1>{{ autoCon['key'] }}</h1> -->
+      <select name="reset_ble" id="inputState" class="form-control" required="">
+              <option selected="">---</option>
+              <option>on</option>
+              <option>off</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+    <br>
+  </div>
+
+
+
+<!--         testing        -->
+<div class="tab-pane fade container" id="nav-resetredis" role="tabpanel" aria-labelledby="nav-update-tab">
+    <br>
+    <div class="container">
+      <form method="POST" action="/resetredis">
+        <button type="submit" class="btn btn-primary">Reset</button>
       </form>
     </div>
     <br>
